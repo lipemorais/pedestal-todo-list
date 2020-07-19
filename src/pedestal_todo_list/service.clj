@@ -26,7 +26,7 @@
 ;; Tabular routes
 (def routes #{["/hello" :get (conj common-interceptors `home-page)]
               ["/about" :get (conj common-interceptors `about-page)]
-              ["/todo" :get (conj common-interceptors `todo-list)]})
+              ["/" :get (conj common-interceptors `todo-list)]})
 
 ;; Map-based routes
 ;(def routes `{"/" {:interceptors [(body-params/body-params) http/html-body]

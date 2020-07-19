@@ -47,14 +47,14 @@
 (facts "todo endpoint"
   (fact "content-type is json"
     (-> service
-        (response-for :get "/todo")
+        (response-for :get "/")
         :headers
         (get "Content-Type"))
     => (contains "application/json"))
 
   (fact "body checking"
     (-> service
-        (response-for :get "/todo")
+        (response-for :get "/")
         :body
         (parse-string true))
     => {:name "lavar a louça"}))
