@@ -57,4 +57,5 @@
         (response-for :get "/")
         :body
         (parse-string true))
-    => {:name "lavar a louça"}))
+    => {:name "lavar a louça"
+        :done false}))

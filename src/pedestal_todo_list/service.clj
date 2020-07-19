@@ -16,7 +16,8 @@
 
 (defn todo-list
   [request]
-  (ring-resp/response {:name "lavar a louça"}))
+  (ring-resp/response {:name "lavar a louça"
+                       :done false}))
 
 ;; Defines "/" and "/about" routes with their associated :get handlers.
 ;; The interceptors defined after the verb map (e.g., {:get home-page}
