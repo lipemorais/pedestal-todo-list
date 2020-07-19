@@ -12,16 +12,21 @@
 
 (defn home-page
   [request]
-  (ring-resp/response "Hello Felipe!"))
+  (ring-resp/response {:hello "Felipe!"}))
+
+(defn todo-list
+  [request]
+  (ring-resp/response {:test "123"}))
 
 ;; Defines "/" and "/about" routes with their associated :get handlers.
 ;; The interceptors defined after the verb map (e.g., {:get home-page}
 ;; apply to / and its children (/about).
-(def common-interceptors [(body-params/body-params) http/html-body])
+(def common-interceptors [(body-params/body-params) http/json-body])
 
 ;; Tabular routes
 (def routes #{["/" :get (conj common-interceptors `home-page)]
-              ["/about" :get (conj common-interceptors `about-page)]})
+              ["/about" :get (conj common-interceptors `about-page)]
+              ["/todo" :get (conj common-interceptors `todo-list)]})
 
 ;; Map-based routes
 ;(def routes `{"/" {:interceptors [(body-params/body-params) http/html-body]
