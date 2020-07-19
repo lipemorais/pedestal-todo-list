@@ -24,7 +24,7 @@
 (def common-interceptors [(body-params/body-params) http/json-body])
 
 ;; Tabular routes
-(def routes #{["/" :get (conj common-interceptors `home-page)]
+(def routes #{["/hello" :get (conj common-interceptors `home-page)]
               ["/about" :get (conj common-interceptors `about-page)]
               ["/todo" :get (conj common-interceptors `todo-list)]})
 

@@ -13,13 +13,13 @@
 (facts "home page test"
   (fact "body is a map"
     (-> service
-        (response-for :get "/")
+        (response-for :get "/hello")
         :body
         (parse-string true))
     => {:hello "Felipe!"})
 
   (fact "expected headers"
-    (:headers (response-for service :get "/")) =>
+    (:headers (response-for service :get "/hello")) =>
     {"Content-Type"                      "application/json;charset=UTF-8"
      "Strict-Transport-Security"         "max-age=31536000; includeSubdomains"
      "X-Frame-Options"                   "DENY"
