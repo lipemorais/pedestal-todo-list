@@ -4,18 +4,23 @@
             [io.pedestal.http :as bootstrap]
             [pedestal-todo-list.service :as service]
             [midje.sweet :refer [fact facts]]
-            [midje.checkers :refer [contains]]))
+            [midje.checkers :refer [contains]]
+            [cheshire.core :refer [parse-string]]))
 
 (def service
   (::bootstrap/service-fn (bootstrap/create-servlet service/service)))
 
 (facts "home page test"
-  (fact
-    (:body (response-for service :get "/")) => "Hello Felipe!")
+  (fact "body is a map"
+    (-> service
+        (response-for :get "/")
+        :body
+        (parse-string true))
+    => {:hello "Felipe!"})
 
-  (fact
+  (fact "expected headers"
     (:headers (response-for service :get "/")) =>
-    {"Content-Type"                      "text/html;charset=UTF-8"
+    {"Content-Type"                      "application/json;charset=UTF-8"
      "Strict-Transport-Security"         "max-age=31536000; includeSubdomains"
      "X-Frame-Options"                   "DENY"
      "X-Content-Type-Options"            "nosniff"
@@ -30,7 +35,7 @@
 
   (fact "check headers"
     (:headers (response-for service :get "/about"))
-    => {"Content-Type"                      "text/html;charset=UTF-8"
+    => {"Content-Type"                      "text/plain"
         "Strict-Transport-Security"         "max-age=31536000; includeSubdomains"
         "X-Frame-Options"                   "DENY"
         "X-Content-Type-Options"            "nosniff"
@@ -38,3 +43,18 @@
         "X-Download-Options"                "noopen"
         "X-Permitted-Cross-Domain-Policies" "none"
         "Content-Security-Policy"           "object-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:;"}))
+
+(facts "todo endpoint"
+  (fact "content-type is json"
+    (-> service
+        (response-for :get "/todo")
+        :headers
+        (get "Content-Type"))
+    => (contains "application/json"))
+
+  (fact "body checking"
+    (-> service
+        (response-for :get "/todo")
+        :body
+        (parse-string true))
+    => {:name "lavar a louça"}))
