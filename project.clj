@@ -25,6 +25,7 @@
 
   :profiles {:dev     {:aliases      {"run-dev" ["trampoline" "run" "-m" "pedestal-todo-list.server/run-dev"]}
                        :dependencies [[midje "1.9.9"]
+                                      [cheshire "5.10.0"]
                                       [io.pedestal/pedestal.service-tools "0.5.8"]]
                        :plugins [[lein-midje "3.2.2"]]}
 
