@@ -29,5 +29,8 @@
                                       [io.pedestal/pedestal.service-tools "0.5.8"]]
                        :plugins [[lein-midje "3.2.2"]]}
 
-             :uberjar {:aot [pedestal-todo-list.server]}}
+             :uberjar {:aot [pedestal-todo-list.server]
+                       :jar-name "todo-list.jar"
+                       :uberjar-name "todo-list-standalone.jar"}}
+
   :main ^{:skip-aot true} pedestal-todo-list.server)
