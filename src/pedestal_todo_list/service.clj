@@ -2,7 +2,8 @@
   (:require [io.pedestal.http :as http]
             [io.pedestal.http.route :as route]
             [io.pedestal.http.body-params :as body-params]
-            [ring.util.response :as ring-resp]))
+            [ring.util.response :as ring-resp]
+            [clojure.edn :as edn]))
 
 (defn about-page
   [request]
@@ -39,7 +40,12 @@
 ;  `[[["/" {:get home-page}
 ;      ^:interceptors [(body-params/body-params) http/html-body]
 ;      ["/about" {:get about-page}]]]])
-
+(def port
+  "Heroku por padrão entrega a porta que a aplicação deve funcionar
+na variavel de ambiente `PORT`. Para desenvolvimento local, vamos usar
+a porta 5000"
+  (or (edn/read-string (System/getenv "PORT"))
+      3000))
 
 ;; Consumed by pedestal-todo-list.server/create-server
 ;; See http/default-interceptors for additional options you can configure
@@ -75,7 +81,7 @@
               ::http/type :jetty
               ;;::http/host "localhost"
               ::http/host "0.0.0.0"
-              ::http/port 3000
+              ::http/port port
               ;; Options to pass to the container (Jetty)
               ::http/container-options {:h2c? true
                                         :h2? false
