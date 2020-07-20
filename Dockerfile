@@ -14,4 +14,4 @@ USER todo-user
 WORKDIR /server/todo
 COPY --chown=todo-user . .
 RUN clojure -Spath
-CMD ["clojure", "pedestal_todo_list.server"]
+CMD ["clojure", "-m", "pedestal-todo-list.server"]
