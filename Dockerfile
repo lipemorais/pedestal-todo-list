@@ -8,10 +8,10 @@
 #CMD ["java", "-jar", "/pedestal-todo-list/app.jar"]
 
 
-FROM clojure:tools-deps-alpine
+FROM clojure:alpine
 RUN adduser -D todo-user
 USER todo-user
 WORKDIR /server/todo
 COPY --chown=todo-user . .
 RUN clojure -Spath
-CMD ["clojure", "-m", "pedestal-todo-list.server"]
+CMD ["lein", "run"]
