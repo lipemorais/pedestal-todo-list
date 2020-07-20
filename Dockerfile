@@ -1,17 +1,9 @@
-#FROM openjdk:8-alpine
-#MAINTAINER Felipe de Morais <felipejpa15@gmail.com>
-#
-#ADD target/pedestal-todo-list-0.0.1-SNAPSHOT-standalone.jar /pedestal-todo-list/app.jar
-#
-#EXPOSE 3000
-#
-#CMD ["java", "-jar", "/pedestal-todo-list/app.jar"]
+FROM clojure:lein-alpine AS dev
+WORKDIR /dev
+COPY . /dev
+RUN lein uberjar
 
-
-FROM clojure:tools-deps-alpine
-RUN adduser -D todo-user
-USER todo-user
-WORKDIR /server/todo
-COPY --chown=todo-user . .
-RUN clojure -Spath
-CMD ["clojure", "-m", "pedestal-todo-list.server"]
+FROM openjdk:alpine AS prod
+COPY --from dev todo-list-standalone.jar --to prod /work
+WORKDIR /work
+CMD java -jar todo-list-standalone.jar
