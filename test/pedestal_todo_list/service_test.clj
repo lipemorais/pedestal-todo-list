@@ -44,6 +44,7 @@
         "X-Permitted-Cross-Domain-Policies" "none"
         "Content-Security-Policy"           "object-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:;"}))
 
+(fact (/ 1 0) => {})
 (facts "todo endpoint"
   (fact "content-type is json"
     (-> service
@@ -57,5 +58,5 @@
         (response-for :get "/")
         :body
         (parse-string true))
-    => {:name "lavar a louça"
-        :done false}))
+    => [{:name "lavar a louça"
+         :done false}]))
