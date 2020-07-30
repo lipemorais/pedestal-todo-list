@@ -44,7 +44,6 @@
         "X-Permitted-Cross-Domain-Policies" "none"
         "Content-Security-Policy"           "object-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'strict-dynamic' https: http:;"}))
 
-(fact (/ 1 0) => {})
 (facts "todo endpoint"
   (fact "content-type is json"
     (-> service

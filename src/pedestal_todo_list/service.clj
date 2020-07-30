@@ -1,45 +1,9 @@
 (ns pedestal-todo-list.service
-  (:require [io.pedestal.http :as http]
-            [io.pedestal.http.route :as route]
-            [io.pedestal.http.body-params :as body-params]
-            [ring.util.response :as ring-resp]
+  (:require
+            [pedestal-todo-list.routes :refer [routes]]
+            [io.pedestal.http :as http]
             [clojure.edn :as edn]))
 
-(defn about-page
-  [request]
-  (ring-resp/response (format "Clojure %s - served from %s"
-                              (clojure-version)
-                              (route/url-for ::about-page))))
-
-(defn home-page
-  [request]
-  (ring-resp/response {:hello "Felipe!"}))
-
-(defn todo-list
-  [request]
-  (ring-resp/response [{:name "lavar a louça"
-                        :done false}]))
-
-;; Defines "/" and "/about" routes with their associated :get handlers.
-;; The interceptors defined after the verb map (e.g., {:get home-page}
-;; apply to / and its children (/about).
-(def common-interceptors [(body-params/body-params) http/json-body])
-
-;; Tabular routes
-(def routes #{["/hello" :get (conj common-interceptors `home-page)]
-              ["/about" :get (conj common-interceptors `about-page)]
-              ["/" :get (conj common-interceptors `todo-list)]})
-
-;; Map-based routes
-;(def routes `{"/" {:interceptors [(body-params/body-params) http/html-body]
-;                   :get home-page
-;                   "/about" {:get about-page}}})
-
-;; Terse/Vector-based routes
-;(def routes
-;  `[[["/" {:get home-page}
-;      ^:interceptors [(body-params/body-params) http/html-body]
-;      ["/about" {:get about-page}]]]])
 (def port
   "Heroku por padrão entrega a porta que a aplicação deve funcionar
 na variavel de ambiente `PORT`. Para desenvolvimento local, vamos usar
@@ -49,13 +13,13 @@ a porta 5000"
 
 ;; Consumed by pedestal-todo-list.server/create-server
 ;; See http/default-interceptors for additional options you can configure
-(def service {:env :prod
+(def service {:env                     :prod
               ;; You can bring your own non-default interceptors. Make
               ;; sure you include routing and set it up right for
               ;; dev-mode. If you do, many other keys for configuring
               ;; default interceptors will be ignored.
               ;; ::http/interceptors []
-              ::http/routes routes
+              ::http/routes            routes
 
               ;; Uncomment next line to enable CORS support, add
               ;; string(s) specifying scheme, host and port for
@@ -74,22 +38,22 @@ a porta 5000"
               ;;                                                          :frame-ancestors "'none'"}}
 
               ;; Root for resource interceptor that is available by default.
-              ::http/resource-path "/public"
+              ::http/resource-path     "/public"
 
               ;; Either :jetty, :immutant or :tomcat (see comments in project.clj)
               ;;  This can also be your own chain provider/server-fn -- http://pedestal.io/reference/architecture-overview#_chain_provider
-              ::http/type :jetty
+              ::http/type              :jetty
               ;;::http/host "localhost"
-              ::http/host "0.0.0.0"
-              ::http/port port
+              ::http/host              "0.0.0.0"
+              ::http/port              port
               ;; Options to pass to the container (Jetty)
               ::http/container-options {:h2c? true
-                                        :h2? false
+                                        :h2?  false
                                         ;:keystore "test/hp/keystore.jks"
                                         ;:key-password "password"
                                         ;:ssl-port 8443
                                         :ssl? false}})
-                                        ;; Alternatively, You can specify you're own Jetty HTTPConfiguration
-                                        ;; via the `:io.pedestal.http.jetty/http-configuration` container option.
-                                        ;:io.pedestal.http.jetty/http-configuration (org.eclipse.jetty.server.HttpConfiguration.)
+;; Alternatively, You can specify you're own Jetty HTTPConfiguration
+;; via the `:io.pedestal.http.jetty/http-configuration` container option.
+;:io.pedestal.http.jetty/http-configuration (org.eclipse.jetty.server.HttpConfiguration.)
 
