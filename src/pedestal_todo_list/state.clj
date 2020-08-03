@@ -1,5 +1,6 @@
 (ns pedestal-todo-list.state)
 
+(def todo-list-state)
 
 (defn state
   []
