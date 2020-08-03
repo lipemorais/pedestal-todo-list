@@ -5,7 +5,7 @@
             [pedestal-todo-list.service :as service]
             [midje.sweet :refer [fact facts]]
             [midje.checkers :refer [contains]]
-            [cheshire.core :refer [parse-string]]))
+            [cheshire.core :as json]))
 
 (def service
   (::bootstrap/service-fn (bootstrap/create-servlet service/service)))
@@ -15,7 +15,7 @@
     (-> service
         (response-for :get "/hello")
         :body
-        (parse-string true))
+        (json/parse-string true))
     => {:hello "Felipe!"})
 
   (fact "expected headers"
@@ -56,6 +56,34 @@
     (-> service
         (response-for :get "/")
         :body
-        (parse-string true))
+        (json/parse-string true))
     => [{:name "lavar a louça"
          :done false}]))
+
+(facts "add task"
+  (fact "item 2"
+    (-> service
+        (response-for :post "/"
+                      :headers {"Content-Type" "application/json"}
+                      :body (json/encode "{\"name\":\"item 2\"}"))
+        :body
+        (json/parse-string true))
+    => [{:name "lavar a louça"
+         :done false}
+        {:name "item 2"
+         :done false}]))
+
+;(facts "Reset endpoint"
+;  (fact "reset state"
+;    (-> service
+;        (response-for :post "/"
+;                      :headers {"Content-Type" "application/json"}
+;                      :body (json/encode "{\"name\":\"item 2\"}")))
+;    (-> service
+;        (response-for :get "/reset"))
+;    ;   :body
+;    ;   (json/parse-string true))
+;    => [{:name "lavar a louça"
+;         :done false}]))
+
+
